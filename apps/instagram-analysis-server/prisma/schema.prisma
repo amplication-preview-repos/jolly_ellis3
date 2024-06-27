@@ -1,0 +1,49 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Reel {
+  analyses        Analysis[]
+  comments        Int?
+  createdAt       DateTime   @default(now())
+  followersGained Int?
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  likes           Int?
+  link            String?
+  reach           Int?
+  saves           Int?
+  shares          Int?
+  updatedAt       DateTime   @updatedAt
+  views           Int?
+  watchTime       Float?
+}
+
+model Analysis {
+  comments      String?
+  createdAt     DateTime @default(now())
+  editingStyle  String?
+  effectiveness String?
+  hook          String?
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  reel          Reel?    @relation(fields: [reelId], references: [id])
+  reelId        String?  @db.ObjectId
+  structure     String?
+  updatedAt     DateTime @updatedAt
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
